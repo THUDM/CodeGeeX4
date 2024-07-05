@@ -21,6 +21,7 @@ We introduce CodeGeeX4-ALL-9B, the open-source version of the latest CodeGeeX4 m
 Use `4.39.0<=transformers<=4.40.2` to quickly launch [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b)：
 
 ```python
+import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -45,7 +46,7 @@ CodeGeeX4-ALL-9B provides three user guides to help users quickly understand and
 
 2. **[Infilling Guideline](./guides/Infilling_guideline.md)**: This guide explains the VSCode extension official infilling format, covering general infilling, cross-file infilling, and generating a new file in a repository.
 
-3. **[repository Tasks Guideline](./guides/Repository_tasks_guideline.md)**: This guide demonstrates how to use repository tasks in CodeGeeX4-ALL-9B, including QA tasks at the repository level and how to trigger the aicommiter capability of CodeGeeX4-ALL-9B to perform deletions, additions, and changes to files at the repository level.
+3. **[Repository Tasks Guideline](./guides/Repository_tasks_guideline.md)**: This guide demonstrates how to use repository tasks in CodeGeeX4-ALL-9B, including QA tasks at the repository level and how to trigger the aicommiter capability of CodeGeeX4-ALL-9B to perform deletions, additions, and changes to files at the repository level.
 
 These guides aim to provide a comprehensive understanding and facilitate efficient use of the model.
 
