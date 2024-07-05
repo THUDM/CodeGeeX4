@@ -1,0 +1,62 @@
+FROM python:3.11-slim-bookworm
+
+WORKDIR /mnt/data
+
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libffi-dev \
+    zlib1g-dev \
+    fonts-arphic-ukai \
+    fonts-arphic-uming \
+    fonts-ipafont-mincho \
+    fonts-ipafont-gothic \
+    fonts-unfonts-core \
+    libgdal-dev \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir \
+    pydantic \
+    tornado \
+    jupyter_client \
+    ipython \
+    ipykernel \
+    numpy \
+    pandas \
+    scipy \
+    matplotlib \
+    scikit-learn \
+    notebook \
+    beautifulsoup4 \
+    seaborn \
+    pytest \
+    ipywidgets \
+    sympy \
+    statsmodels \
+    joblib \
+    cython \
+    lxml \
+    xlrd \
+    qrcode \
+    nltk \
+    opencv-python \
+    Pillow \
+    geopandas
+
+ENV HOME=/mnt/data
+
+RUN find / -perm +6000 -type f -exec chmod a-s {} \; || true
+RUN echo "set -o history -o vi" >> /etc/profile
+RUN useradd -u 999 -ms /bin/bash appuser
+RUN chown -R appuser:appuser /mnt/data
+USER appuser
+
+ENV JUPYTER_RUNTIME_DIR=/mnt/data/.local/share/jupyter/runtime
+ENV JUPYTER_DATA_DIR=/mnt/data/.local/share/jupyter
+ENV JUPYTER_CONFIG_DIR=/mnt/data/.jupyter
+
+COPY sandbox.py /sandbox.py
+
+VOLUME [ "/mnt/data" ]
+
+CMD ["python", "/sandbox.py"]
