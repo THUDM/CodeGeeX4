@@ -1,7 +1,7 @@
 ![](resources/logo.jpeg)
 
 <p align="center">
-    🏠 <a href="https://codegeex.cn" target="_blank">Homepage</a>｜🛠 Extensions <a href="https://marketplace.visualstudio.com/items?itemName=aminer.codegeex" target="_blank">VS Code</a>, <a href="https://plugins.jetbrains.com/plugin/20587-codegeex" target="_blank">Jetbrains</a>｜🤗 <a href="https://huggingface.co/THUDM/codegeex4-all-9b" target="_blank">HF Repo</a> | 🪧 <a href="https://huggingface.co/spaces/THUDM/CodeGeeX" target="_blank">HF DEMO</a>
+    🏠 <a href="https://codegeex.cn" target="_blank">Homepage</a>｜🛠 Extensions <a href="https://marketplace.visualstudio.com/items?itemName=aminer.codegeex" target="_blank">VS Code</a>, <a href="https://plugins.jetbrains.com/plugin/20587-codegeex" target="_blank">Jetbrains</a>｜🤗 <a href="https://huggingface.co/THUDM/codegeex4-all-9b" target="_blank">HF Repo</a> | 🪧 <a href="https://huggingface.co/spaces/THUDM/codegeex-4-9b" target="_blank">HF DEMO</a>
 </p>
 
 [English](./README.md) | [中文](./README_zh.md)
