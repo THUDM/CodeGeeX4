@@ -54,9 +54,9 @@ These guides aim to provide a comprehensive understanding and facilitate efficie
 
 CodeGeeX4-ALL-9B is ranked as the most powerful model under 10 billion parameters, even surpassing general models several times its size, achieving the best balance between inference performance and model effectiveness.
 
-CodeGeeX4-ALL-9B scored `48.9` and `40.4` for the `complete` and `instruct` tasks of BigCodeBench, which are the highest scores among models with less than 20 billion parameters. 
-![BigCodeBench Test Results](./metric/pics/Bigcodebench.png)
-In CRUXEval, a benchmark for testing code reasoning, understanding, and execution capabilities, CodeGeeX4-ALL-9B presented remarkable results with its COT (chain-of-thought) abilities. From easy code generation tasks in HumanEval and MBPP, to very challenging tasks in NaturalCodeBench, CodeGeeX4-ALL-9B also achieved outstanding performance at its scale. It is currently the only code model that supports Function Call capabilities and even achieves a better execution success rate than GPT-4. 
+CodeGeeX4-ALL-9B scored `48.9` and `40.4` for the `complete` and `instruct` tasks of BigCodeBench, which are the highest scores among models with less than 20 billion parameters.
+![BigCodeBench Test Results](./metric/pics/Bigcodebench.PNG)
+In CRUXEval, a benchmark for testing code reasoning, understanding, and execution capabilities, CodeGeeX4-ALL-9B presented remarkable results with its COT (chain-of-thought) abilities. From easy code generation tasks in HumanEval and MBPP, to very challenging tasks in NaturalCodeBench, CodeGeeX4-ALL-9B also achieved outstanding performance at its scale. It is currently the only code model that supports Function Call capabilities and even achieves a better execution success rate than GPT-4.
 ![Function Call Evaluation](./metric/pics/FunctionCall.png)
 Furthermore, in the "Code Needle In A Haystack" (NIAH) evaluation, the CodeGeeX4-ALL-9B model demonstrated its ability to retrieve code within contexts up to 128K, achieving a 100% retrieval accuracy in all python scripts.
 <p align="center">
@@ -77,7 +77,7 @@ The code in this repository is open source under the [Apache-2.0](https://www.ap
 
 If you find our work helpful, please feel free to cite the following paper:
 
-```
+```bibtex
 @inproceedings{zheng2023codegeex,
       title={CodeGeeX: A Pre-Trained Model for Code Generation with Multilingual Evaluations on HumanEval-X},
       author={Qinkai Zheng and Xiao Xia and Xu Zou and Yuxiao Dong and Shan Wang and Yufei Xue and Zihan Wang and Lei Shen and Andi Wang and Yang Li and Teng Su and Zhilin Yang and Jie Tang},
