@@ -77,7 +77,7 @@ Crux-Eval 是测试代码推理、理解和执行能力的基准测试，借助�
 
 ## 许可证
 
-本仓库中的代码是根据 [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) 许可证开源的。模型权重根据 [模型许可证](MODEL_LICENSE) 许可。CodeGeeX4-9B 权重对学术研究开放。对于希望将模型用于商业目的的用户，请填写 [登记表](https://open.bigmodel.cn/mla/form)。
+本仓库中的代码是根据 [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) 许可证开源的。模型权重根据 [模型许可证](MODEL_LICENSE) 许可。CodeGeeX4-9B 权重对学术研究开放。对于希望将模型用于商业目的的用户，请填写 [登记表](https://bigmodel.cn/mla/form?mcode=CodeGeeX4-ALL-9B)。
 
 
 ## 引用

@@ -77,7 +77,7 @@ Details of the evaluation results can be found in the **[Evaluation](./metric/RE
 
 ## License
 
-The code in this repository is open source under the [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) license. The model weights are licensed under the [Model License](MODEL_LICENSE). CodeGeeX4-9B weights are open for academic research. For users who wish to use the models for commercial purposes, please fill in the [registration form](https://open.bigmodel.cn/mla/form).
+The code in this repository is open source under the [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) license. The model weights are licensed under the [Model License](MODEL_LICENSE). CodeGeeX4-9B weights are open for academic research. For users who wish to use the models for commercial purposes, please fill in the [registration form](https://bigmodel.cn/mla/form?mcode=CodeGeeX4-ALL-9B).
 
 
 ## Citation
