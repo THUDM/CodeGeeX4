@@ -26,7 +26,7 @@ def main():
                     "properties": {
                         "location": {
                             "description": "the location need to check the weather",
-                            "tyoe": "str",
+                            "type": "str",
                         }
                     },
                     "required": [
