@@ -2,14 +2,7 @@ from pydantic import Field
 from transformers import AutoModel, AutoTokenizer
 from typing import Iterator
 import torch
-class StreamProcessor:
-    def __init__(self):
-        self.previous_str = ""
 
-    def get_new_part(self, new_str):
-        new_part = new_str[len(self.previous_str):]
-        self.previous_str = new_str
-        return new_part
 class CodegeexChatModel():
     device: str = Field(description="device to load the model")
     tokenizer = Field(description="model's tokenizer")
@@ -31,7 +24,7 @@ class CodegeexChatModel():
             response, _ = self.model.chat(
                 self.tokenizer,
                 query=prompt,
-                max_length=4012,
+                max_length=120000,
                 temperature=temperature,
                 top_p=top_p
             )
@@ -42,14 +35,13 @@ class CodegeexChatModel():
     def stream_chat(self,prompt,temperature=0.2,top_p=0.95):
 
         try:
-            stream_processor = StreamProcessor()
             for response, _ in self.model.stream_chat(
                     self.tokenizer,
                     query=prompt,
-                    max_length=4012,
+                    max_length=120000,
                     temperature=temperature,
                     top_p=top_p
             ):
-                yield stream_processor.get_new_part(response)
+                yield response
         except Exception as e:
             yield f'error: {e}'

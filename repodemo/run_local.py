@@ -5,7 +5,6 @@ from prompts.base_prompt import judge_task_prompt,get_cur_base_user_prompt,web_j
 from utils.tools import unzip_file,get_project_files_with_content
 from utils.bingsearch import bing_search_prompt
 from llm.local.codegeex4 import CodegeexChatModel
-
 local_model_path = '<your_local_model_path>'
 llm = CodegeexChatModel(local_model_path)
 
@@ -155,8 +154,13 @@ async def main(message: cl.Message):
     
     if len(prompt_content)/4<120000:
         stream =  llm.stream_chat(prompt_content,temperature=temperature,top_p = top_p)
+        stream_processor = StreamProcessor()
         for part in stream:
-            if token := (part or " "):
+            if isinstance(part, str):
+                text = stream_processor.get_new_part(part)
+            elif isinstance(part, dict):
+                text = stream_processor.get_new_part(part['name']+part['content'])
+            if token := (text or " "):
                 await msg.stream_token(token)
     else:
         await msg.stream_token("项目太大了，请换小一点的项目。")
