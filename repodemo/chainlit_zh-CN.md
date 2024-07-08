@@ -13,13 +13,17 @@
 ## 功能
 
 -  支持多轮对话
+-  支持联网问答
 -  支持上传本地zip压缩包项目，可以进行项目问答和对项目进行修改
 
 ## 安装
 
 1. 克隆仓库到本地
-2. 安装依赖：`pip install -r requirements.txt`
-3.  运行应用：`chain run run.py --port 8888`
+2. 设置模型，可以选择本地模型或者api模型,如果使用本地模型需要到run_local.py里设置local_model_path
+3. 如果要用联网问答需要设置bingsearch API，在utils/bingsearch.py中设置bingsearch_api_key
+3. 安装依赖：`pip install -r requirements.txt`
+4. 运行应用：`chainlit run run.py --port 8888` 如果用本地：`chainlit run run_local.py --port 8888`
+
 
 ## 注意
 

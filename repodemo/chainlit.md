@@ -1,35 +1,37 @@
 # CodeGeeX
 
-#   Welcome to use my chat dome application
+## Welcome to My Chat Dome Application
 
 This is a simple demonstration application.
 
-## Usage
+## Instructions
 
-1.  Enter your question
-2.   Wait for the reply
-3.  Enjoy the conversation!
+1. Enter your question
+2. Wait for a reply
+3. Enjoy the conversation!
 
 ## Features
 
--  Support multi-round dialogue
--  Support uploading local zip compressed project package, and can perform project question and answer and modify the project
+- Supports multi-turn conversations
+- Supports internet-connected Q&A
+- Allows uploading local zip project files for project-related Q&A and modifications
 
 ## Installation
 
 1. Clone the repository to your local machine
-2. Install dependencies: `pip install -r requirements.txt`
-3. Run the application: `python run.py`
+2. Set up the model; you can choose between a local model or an API model. If using a local model, set `local_model_path` in `run_local.py`
+3. For internet-connected Q&A, set the Bing Search API key in `utils/bingsearch.py` (`bingsearch_api_key`)
+4. Install dependencies: `pip install -r requirements.txt`
+5. Run the application: `chainlit run run.py --port 8888`. For local use: `chainlit run run_local.py --port 8888`
 
-## Note
+## Notes
 
-Please ensure that your network environment can access the CodeGeeX API.
+Ensure that your network environment can access the CodeGeeX API.
 
-##   Disclaimer
+## Disclaimer
 
-This application is for learning and research purposes only and shall not be used for any commercial purposes. The developer is not responsible for any loss or damage caused by the use of this application.
+This application is for educational and research purposes only. It must not be used for any commercial purposes. The developer is not responsible for any loss or damage caused by the use of this application.
 
-##   Thank you
+## Acknowledgements
 
-Thank you for using our application. If you have any questions or suggestions, please feel free to contact us. We look forward to your feedback and are committed to providing you with better services.
-
+Thank you for using our application. If you have any questions or suggestions, please feel free to contact us. We look forward to your feedback and are committed to providing better service.

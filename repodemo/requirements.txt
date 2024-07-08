@@ -1,2 +1,7 @@
 chainlit==1.1.305
 beautifulsoup4
+#local
+accelerate==0.31.0
+tiktoken==0.7.0
+torch==2.3.1
+transformers==4.39.0
