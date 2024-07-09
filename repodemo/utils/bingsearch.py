@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup as BS4
-import requests
 
 BING_API_KEY = "<your_bing_api_key>"
 

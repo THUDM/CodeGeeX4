@@ -1,5 +1,6 @@
-import requests
 import json
+
+import requests
 
 URL = ""  # the url you deploy codegeex service
 

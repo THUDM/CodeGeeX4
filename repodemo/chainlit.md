@@ -1,6 +1,6 @@
 # CodeGeeX
 
-## Welcome to My Chat Dome Application
+## Welcome to My Chat Demo Application
 
 This is a simple demonstration application.
 

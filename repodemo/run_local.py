@@ -1,14 +1,14 @@
 import chainlit as cl
 from chainlit.input_widget import Slider
-from llm.api.codegeex4 import codegeex4
+
+from llm.local.codegeex4 import CodegeexChatModel
 from prompts.base_prompt import (
     judge_task_prompt,
     get_cur_base_user_prompt,
     web_judge_task_prompt,
 )
-from utils.tools import unzip_file, get_project_files_with_content
 from utils.bingsearch import bing_search_prompt
-from llm.local.codegeex4 import CodegeexChatModel
+from utils.tools import unzip_file, get_project_files_with_content
 
 local_model_path = "<your_local_model_path>"
 llm = CodegeexChatModel(local_model_path)
@@ -19,7 +19,7 @@ class StreamProcessor:
         self.previous_str = ""
 
     def get_new_part(self, new_str):
-        new_part = new_str[len(self.previous_str) :]
+        new_part = new_str[len(self.previous_str):]
         self.previous_str = new_str
         return new_part
 

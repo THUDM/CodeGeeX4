@@ -51,7 +51,7 @@ auto_tag_thread = true
 
 [UI]
 # Name of the assistant.
-name = "CodeGeeX4 RepoDome"
+name = "CodeGeeX4 RepoDemo"
 
 # Description of the assistant. This is used for HTML tags.
 description = "CodeGeeX4项目级能力展示"

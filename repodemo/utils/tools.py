@@ -1,6 +1,6 @@
-import zipfile
-import os
 import json
+import os
+import zipfile
 
 
 def unzip_file(zip_path, extract_dir):
@@ -103,7 +103,6 @@ def filter_data(obj):
         "delphi": "{ Delphi }",
         "scheme": "; Scheme",
         "basic": "' Basic",
-        "assembly": "; Assembly",
         "groovy": "// Groovy",
         "abap": "* Abap",
         "gdscript": "# GDScript",
@@ -122,7 +121,6 @@ def filter_data(obj):
         "dockerfile": "# Dockerfile",
         "markdown": "<!-- Markdown -->",
         "cmake": "# CMake",
-        "dockerfile": "# Dockerfile",
     }
 
     programming_languages_to_file_extensions = json.load(

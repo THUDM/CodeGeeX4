@@ -1,13 +1,14 @@
 import chainlit as cl
 from chainlit.input_widget import Slider
+
 from llm.api.codegeex4 import codegeex4
 from prompts.base_prompt import (
     judge_task_prompt,
     get_cur_base_user_prompt,
     web_judge_task_prompt,
 )
-from utils.tools import unzip_file, get_project_files_with_content
 from utils.bingsearch import bing_search_prompt
+from utils.tools import unzip_file, get_project_files_with_content
 
 
 @cl.set_chat_profiles
@@ -15,7 +16,7 @@ async def chat_profile():
     return [
         cl.ChatProfile(
             name="chat聊天",
-        markdown_description="聊天demo：支持多轮对话。",
+            markdown_description="聊天demo：支持多轮对话。",
             starters=[
                 cl.Starter(
                     label="请你用python写一个快速排序。",

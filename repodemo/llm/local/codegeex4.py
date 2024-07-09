@@ -1,7 +1,6 @@
+import torch
 from pydantic import Field
 from transformers import AutoModel, AutoTokenizer
-from typing import Iterator
-import torch
 
 
 class CodegeexChatModel:
@@ -34,17 +33,17 @@ class CodegeexChatModel:
             )
             return response
         except Exception as e:
-            return f"error:{e}"
+            return f"error: {e}"
 
     def stream_chat(self, prompt, temperature=0.2, top_p=0.95):
 
         try:
             for response, _ in self.model.stream_chat(
-                self.tokenizer,
-                query=prompt,
-                max_length=120000,
-                temperature=temperature,
-                top_p=top_p,
+                    self.tokenizer,
+                    query=prompt,
+                    max_length=120000,
+                    temperature=temperature,
+                    top_p=top_p,
             ):
                 yield response
         except Exception as e:
