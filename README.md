@@ -39,7 +39,7 @@ with torch.no_grad():
     print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ```
 
-Use vllm==0.5.1 to quickly launch
+Use `vllm==0.5.1` to quickly launch
 ```
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
@@ -58,7 +58,7 @@ llm = LLM(
     max_model_len=max_model_len,
     trust_remote_code=True,
     enforce_eager=True,
-    # GLM-4-9B-Chat-1M 如果遇见 OOM 现象，建议开启下述参数
+    # If OOM，try using follong parameters
     # enable_chunked_prefill=True,
     # max_num_batched_tokens=8192
 )
