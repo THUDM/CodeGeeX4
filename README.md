@@ -39,6 +39,44 @@ with torch.no_grad():
     print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ```
 
+Use vllm==0.5.1 to quickly launch
+```
+from transformers import AutoTokenizer
+from vllm import LLM, SamplingParams
+
+# CodeGeeX4-ALL-9B
+# max_model_len, tp_size = 1048576, 4
+# If OOM，please reduce max_model_len，or increase tp_size
+max_model_len, tp_size = 131072, 1
+model_name = "codegeex4-all-9b"
+prompt = [{"role": "user", "content": "Hello"}]
+
+tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+llm = LLM(
+    model=model_name,
+    tensor_parallel_size=tp_size,
+    max_model_len=max_model_len,
+    trust_remote_code=True,
+    enforce_eager=True,
+    # GLM-4-9B-Chat-1M 如果遇见 OOM 现象，建议开启下述参数
+    # enable_chunked_prefill=True,
+    # max_num_batched_tokens=8192
+)
+stop_token_ids = [151329, 151336, 151338]
+sampling_params = SamplingParams(temperature=0.95, max_tokens=1024, stop_token_ids=stop_token_ids)
+
+inputs = tokenizer.apply_chat_template(prompt, tokenize=False, add_generation_prompt=True)
+outputs = llm.generate(prompts=inputs, sampling_params=sampling_params)
+
+print(outputs[0].outputs[0].text)
+```
+Set up OpenAI Compatible Server via vllm using following command, detailed please check [OpenAI Compatible Server Via vllm docs](https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html)
+```
+python -m vllm.entrypoints.openai.api_server \
+     --model THUDM/codegeex4-all-9b \
+     --trust_remote_code
+```
+
 ## Tutorials
 CodeGeeX4-ALL-9B provides three user guides to help users quickly understand and use the model:
 
