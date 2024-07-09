@@ -15,7 +15,7 @@ async def chat_profile():
     return [
         cl.ChatProfile(
             name="chat聊天",
-            markdown_description="聊天demo：支持多轮对话。",
+        markdown_description="聊天demo：支持多轮对话。",
             starters=[
                 cl.Starter(
                     label="请你用python写一个快速排序。",
