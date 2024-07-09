@@ -39,7 +39,7 @@ with torch.no_grad():
     print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ```
 
-Use `vllm==0.5.1` to quickly launch
+Use `vllm==0.5.1` to quickly launch [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b):
 ```
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
@@ -70,7 +70,7 @@ outputs = llm.generate(prompts=inputs, sampling_params=sampling_params)
 
 print(outputs[0].outputs[0].text)
 ```
-Set up OpenAI Compatible Server via vllm using following command, detailed please check [OpenAI Compatible Server Via vllm docs](https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html)
+Set up OpenAI Compatible Server via vllm, detailed please check [OpenAI Compatible Server](https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html)
 ```
 python -m vllm.entrypoints.openai.api_server \
      --model THUDM/codegeex4-all-9b \
