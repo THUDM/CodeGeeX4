@@ -103,7 +103,7 @@ CodeGeeX4-ALL-9B 被评为参数量100 亿内的最强模型，甚至超越了�
 | CodeGeeX4-All-9B            | 128K           | 82.3          | 75.7     | 40.4    | 28.5    | 85.0             | 47.1           |
 
 在 BigCodeBench 的 complete 和 instruct 任务中，CodeGeeX4-ALL-9B 分别取得了 `48.9` 和 `40.4` 的高分，这在参数量 200 亿内的模型中是最高的分数。
-![BigCodeBench Test Results](./metric/pics/Bigcodebench.PNG)
+![BigCodeBench Test Results](./metric/pics/Bigcodebench.png)
 Crux-Eval 是测试代码推理、理解和执行能力的基准测试，借助于其强大的 COT 能力，CodeGeeX4-ALL-9B 展现出色的表现。在 HumanEval、MBPP 和 NaturalCodeBench 等代码生成任务中，CodeGeeX4-ALL-9B 也取得了出色的成绩。目前，它是唯一支持 Function Call 功能的代码模型，甚至取得了比 GPT-4 更高的分数。
 ![Function Call Evaluation](./metric/pics/FunctionCall.png)
 此外，在“Code Needle In A Haystack” (NIAH) 评估中，CodeGeeX4-ALL-9B 模型展示了在 128K 范围内检索代码的能力，在python语言环境达到了 100% 的检索准确率，并在跨文件补全任务中表现出色。
