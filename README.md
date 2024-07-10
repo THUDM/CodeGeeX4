@@ -100,7 +100,7 @@ CodeGeeX4-ALL-9B is ranked as the most powerful model under 10 billion parameter
 | CodeGeeX4-All-9B            | 128K           | 82.3          | 75.7     | 40.4    | 28.5    | 85.0             | 47.1           |
 
 CodeGeeX4-ALL-9B scored `48.9` and `40.4` for the `complete` and `instruct` tasks of BigCodeBench, which are the highest scores among models with less than 20 billion parameters.
-![BigCodeBench Test Results](./metric/pics/Bigcodebench.PNG)
+![BigCodeBench Test Results](./metric/pics/Bigcodebench.png)
 In CRUXEval, a benchmark for testing code reasoning, understanding, and execution capabilities, CodeGeeX4-ALL-9B presented remarkable results with its COT (chain-of-thought) abilities. From easy code generation tasks in HumanEval and MBPP, to very challenging tasks in NaturalCodeBench, CodeGeeX4-ALL-9B also achieved outstanding performance at its scale. It is currently the only code model that supports Function Call capabilities and even achieves a better execution success rate than GPT-4.
 ![Function Call Evaluation](./metric/pics/FunctionCall.png)
 Furthermore, in the "Code Needle In A Haystack" (NIAH) evaluation, the CodeGeeX4-ALL-9B model demonstrated its ability to retrieve code within contexts up to 128K, achieving a 100% retrieval accuracy in all python scripts.
