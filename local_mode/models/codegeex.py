@@ -10,8 +10,6 @@ from protocols.openai_api import ChatCompletionRequest, ChatCompletionStreamResp
 from sseclient import Event
 from transformers import AutoTokenizer, AutoModel
 
-SYS_PROMPT = "你是一位智能编程助手，你叫CodeGeeX。你会为用户回答关于编程、代码、计算机方面的任何问题，并提供格式规范、可以执行、准确安全的代码，并在必要时提供详细的解释。"
-
 
 class CodegeexChatModel:
     def __init__(self, args):
@@ -71,8 +69,6 @@ class CodegeexChatModel:
             resp = ChatCompletionResponse()
             resp.choices[0].message.content = response
             resp.choices[0].finish_reason = 'stop'
-            # event = Event(id=resp.id, data=resp.json(), event='message')
-            # return event.dump()
             return resp.model_dump()
         except Exception as e:
             return f"请求报错，错误原因：{e}"
