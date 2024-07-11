@@ -59,7 +59,7 @@ class CodegeexChatModel:
         try:
             response, _ = self.model.chat(
                 self.tokenizer,
-                query=request.messages[0].content,
+                query=request.messages[-1].content,
                 history=[msg.model_dump() for msg in request.messages[:-1]],
                 max_new_tokens=request.max_tokens,
                 temperature=request.temperature,
