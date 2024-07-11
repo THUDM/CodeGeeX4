@@ -6,7 +6,7 @@
 
 [English](./README.md) | [中文](./README_zh.md)
 
-# CodeGeeX4: 开源多语言代码生成模型
+# CodeGeeX4: 全能的开源多语言代码生成模型
 
 我们推出了 CodeGeeX4-ALL-9B，这是最新的 CodeGeeX4 系列模型的开源版本。该模型是在 [GLM-4-9B](https://github.com/THUDM/GLM-4) 基础上持续训练的多语言代码生成模型，显著提升了代码生成能力。使用单个 CodeGeeX4-ALL-9B 模型，可以支持代码补全与生成、代码解释、联网搜索、函数调用、仓库级代码问答等多种功能，覆盖了软件开发的各个场景。CodeGeeX4-ALL-9B 在 [BigCodeBench](https://huggingface.co/datasets/bigcode/bigcodebench) 和 [NaturalCodeBench](https://github.com/THUDM/NaturalCodeBench) 等公开基准测试中取得了极具竞争力的表现。它是目前参数量少于 100 亿的最强代码生成模型，甚至超越了更大的通用模型，在推理速度和模型性能方面达到了最佳平衡。
 
@@ -18,6 +18,15 @@
 
 ## 快速开始
 
+### Ollama
+CodeGeeX4 正式上线[Ollama](https://ollama.com/library/codegeex4)！
+请安装[Ollama 0.2](https://github.com/ollama/ollama/releases/tag/v0.2.0)或更高版本，并运行以下命令:
+```bash
+ollama run codegeex4
+```
+把本地模型接入[VS Code](https://marketplace.visualstudio.com/items?itemName=aminer.codegeex) / [Jetbrains](https://plugins.jetbrains.com/plugin/20587-codegeex)插件，请参考[本地模式教程](./guides/Local_mode_guideline_zh.md).
+
+### Huggingface transformers
 请使用 `4.39.0<=transformers<=4.40.2` 部署 [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b)：
 
 ```python
@@ -37,6 +46,8 @@ with torch.no_grad():
     outputs = outputs[:, inputs['input_ids'].shape[1]:]
     print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ```
+
+### vLLM
 使用 `vllm==0.5.1` 快速启动 [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b)：
 
 ```python
@@ -88,6 +99,8 @@ python -m vllm.entrypoints.openai.api_server \
 2. **[上下文补全指南](./guides/Infilling_guideline_zh.md)**：本指南解释了 VSCode 插件的官方填充格式，涵盖一般补全、跨文件补全和在仓库中生成新文件。
 
 3. **[项目级代码生成指南](./guides/Repository_tasks_guideline_zh.md)**：本指南展示了如何在 CodeGeeX4-ALL-9B 中使用项目级任务，包括项目级别的问答任务，以及如何触发 CodeGeeX4-ALL-9B 的 aicommiter 功能以执行仓库级别任务中的删除、添加和更改文件操作。
+
+4. **[本地模式指南](./guides/Local_mode_guideline_zh.md)**：本指南展示了如果在本地部署 CodeGeeX4-ALL-9B 并接入 Visual Studio Code / Jetbrains 插件中使用。
 
 这些指南旨在帮助大家全面理解模型的用法并更好发挥模型的能力。
 

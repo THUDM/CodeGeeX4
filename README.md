@@ -18,6 +18,15 @@ We introduce CodeGeeX4-ALL-9B, the open-source version of the latest CodeGeeX4 m
 
 ## Get Started
 
+### Ollama
+CodeGeeX4 is now available on [Ollama](https://ollama.com/library/codegeex4)!
+Please install [Ollama 0.2](https://github.com/ollama/ollama/releases/tag/v0.2.0) or later and run the following command:
+```bash
+ollama run codegeex4
+```
+To connect the local model to our [VS Code](https://marketplace.visualstudio.com/items?itemName=aminer.codegeex) / [Jetbrains](https://plugins.jetbrains.com/plugin/20587-codegeex) extensions, please check [Local Mode Guideline](./guides/Local_mode_guideline.md).
+
+### Huggingface transformers
 Use `4.39.0<=transformers<=4.40.2` to quickly launch [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b)：
 
 ```python
@@ -39,6 +48,7 @@ with torch.no_grad():
     print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ```
 
+### vLLM
 Use `vllm==0.5.1` to quickly launch [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b):
 ```
 from transformers import AutoTokenizer
@@ -85,6 +95,8 @@ CodeGeeX4-ALL-9B provides three user guides to help users quickly understand and
 2. **[Infilling Guideline](./guides/Infilling_guideline.md)**: This guide explains the VSCode extension official infilling format, covering general infilling, cross-file infilling, and generating a new file in a repository.
 
 3. **[Repository Tasks Guideline](./guides/Repository_tasks_guideline.md)**: This guide demonstrates how to use repository tasks in CodeGeeX4-ALL-9B, including QA tasks at the repository level and how to trigger the aicommiter capability of CodeGeeX4-ALL-9B to perform deletions, additions, and changes to files at the repository level.
+
+4. **[Local Mode Guideline](./guides/Local_mode_guideline.md)**：This guide introduces how to deploy CodeGeeX4-ALL-9B locally and connect it to Visual Studio Code / Jetbrains extensions.
 
 These guides aim to provide a comprehensive understanding and facilitate efficient use of the model.
 
