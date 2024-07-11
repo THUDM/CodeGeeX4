@@ -1,0 +1,13 @@
+accelerate==0.31.0
+fastapi==0.111.0
+openai==1.35.12
+pydantic==2.8.2
+regex==2024.5.15
+requests==2.32.3
+shortuuid==1.0.13
+sseclient==0.0.27
+starlette==0.37.2
+tiktoken==0.7.0
+torch==2.3.1
+transformers==4.39.0
+uvicorn==0.30.1
