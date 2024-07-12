@@ -174,7 +174,7 @@ fn main() -> Result<(),()> {
     );
     println!(
         "temp: {:.2} repeat-penalty: {:.2} repeat-last-n: {}",
-        args.temperature.unwrap_or(0.),
+        args.temperature.unwrap_or(0.95),
         args.repeat_penalty,
         args.repeat_last_n
     );
