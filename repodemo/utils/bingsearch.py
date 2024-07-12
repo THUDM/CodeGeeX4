@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup as BS4
+import os
 
-BING_API_KEY = "<your_bing_api_key>"
+BING_API_KEY = os.getenv("bing_api_key")
 
 
 def search_with_bing(query: str, search_timeout=30, top_k=6) -> list[dict]:

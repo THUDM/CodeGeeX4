@@ -1,8 +1,53 @@
 import json
 import os
 import zipfile
+import git
+import urllib.parse
+import re
 
+def is_valid_json(json_string):
+    try:
+        match = re.search(r'\{.*\}', json_string, re.DOTALL)
+        if match:
+            dict_str = match.group()
+            json.loads(dict_str)
+        else:
+            json.loads(json_string)
+        return True
+    except ValueError:
+        return False
 
+def clone_repo(repo_url, clone_to):
+    """
+    克隆一个GitHub仓库。
+
+    参数:
+    repo_url (str): 原始仓库的URL。
+    clone_to (str): 克隆到的本地目录。
+
+    返回:
+    str: 成功时返回克隆到的本地目录（包含子目录），不成功时返回空字符串。
+    """
+    try:
+        if not os.path.exists(clone_to):
+            os.makedirs(clone_to)
+
+        # 从URL中提取仓库名称
+        repo_name = urllib.parse.urlparse(repo_url).path.split('/')[-1]
+
+        # 在clone_to目录下创建新的目录
+        cloned_path = os.path.join(clone_to, repo_name)
+        if os.path.exists(cloned_path):
+            return cloned_path
+
+        # 克隆仓库
+        repo = git.Repo.clone_from(repo_url, cloned_path)
+        
+        print(f"Repository cloned to {cloned_path}")
+        return cloned_path
+    except Exception as e:
+        print(f"Failed to clone repository: {e}")
+        return None
 def unzip_file(zip_path, extract_dir):
     """
     解压zip文件到指定目录，并在指定目录下创建一个新的目录存放解压后的文件

@@ -1,40 +1,22 @@
 import json
-
+from openai import OpenAI
 import requests
+import os
+def codegeex4(messages_list, temperature=0.2, top_p=0.95):
+    openai_api_key = os.getenv("openai_api_key")
+    openai_api_base = os.getenv("openai_api_base")
+    model_name = os.getenv("model_name")
 
-URL = ""  # the url you deploy codegeex service
 
+    client = OpenAI(
+        api_key=openai_api_key,
+        base_url=openai_api_base,
+    )
 
-def codegeex4(prompt, temperature=0.8, top_p=0.8):
-    url = URL
-    headers = {"Content-Type": "application/json"}
-    data = {
-        "inputs": prompt,
-        "parameters": {
-            "best_of": 1,
-            "do_sample": True,
-            "max_new_tokens": 4012,
-            "temperature": temperature,
-            "top_p": top_p,
-            "stop": ["<|endoftext|>", "<|user|>", "<|observation|>", "<|assistant|>"],
-        },
-    }
-    response = requests.post(url, json=data, headers=headers, verify=False, stream=True)
-
-    if response.status_code == 200:
-        for line in response.iter_lines():
-            if line:
-                decoded_line = line.decode("utf-8").replace("data:", "").strip()
-                if decoded_line:
-                    try:
-
-                        content = json.loads(decoded_line)
-
-                        token_text = content.get("token", {}).get("text", "")
-                        if "<|endoftext|>" in token_text:
-                            break
-                        yield token_text
-                    except json.JSONDecodeError:
-                        continue
-    else:
-        print("请求失败:", response.status_code)
+    chat_response = client.chat.completions.create(
+        model=model_name,
+        messages=messages_list,
+        temperature=temperature,
+        top_p=top_p
+    )
+    return chat_response.choices[0].message.content
