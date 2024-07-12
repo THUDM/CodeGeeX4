@@ -11,7 +11,7 @@ description = "Codegeex4"
 # candle-transformers = {path = "../candle/candle-transformers"}
 # candle-core = {path = "../candle/candle-core"}
 # candle-nn = {path = "../candle/candle-nn"}
-anyhow = "1.0.86"
+#anyhow = "1.0.86"
 hf-hub = "0.3.2"
 #tokenizer = "0.1.2"
 clap = { version = "4.5.6", features = ["derive"] }
