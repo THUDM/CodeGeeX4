@@ -26,6 +26,9 @@ candle-examples = "0.6.0"
 candle-nn = "0.6.0"
 safetensors = "0.4.3"
 #safetensors = {path ="../safetensors/safetensors"}
+[build-dependencies]
+bindgen_cuda = { version = "0.1.1", optional = true }
+
 
 [features]
 default = []
