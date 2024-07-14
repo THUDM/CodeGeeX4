@@ -32,5 +32,5 @@ bindgen_cuda = { version = "0.1.1", optional = true }
 
 [features]
 default = []
-cuda = ["candle/cuda", "candle-nn/cuda", "candle-transformers/cuda", "dep:bindgen_cuda"]
+cuda = ["candle-core/cuda", "candle-nn/cuda", "candle-transformers/cuda", "dep:bindgen_cuda"]
 
