@@ -26,3 +26,8 @@ candle-examples = "0.6.0"
 candle-nn = "0.6.0"
 safetensors = "0.4.3"
 #safetensors = {path ="../safetensors/safetensors"}
+
+[features]
+default = []
+cuda = ["candle/cuda", "candle-nn/cuda", "candle-transformers/cuda", "dep:bindgen_cuda"]
+
