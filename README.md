@@ -90,6 +90,8 @@ python -m vllm.entrypoints.openai.api_server \
 ## Tutorials
 CodeGeeX4-ALL-9B provides three user guides to help users quickly understand and use the model:
 
+![ALL Fuctions](./resources/all_functions.jpg)
+
 1. **[System Prompt Guideline](./guides/System_prompt_guideline.md)**: This guide introduces how to use system prompts in CodeGeeX4-ALL-9B, including the VSCode extension official system prompt, customized system prompts, and some tips for maintaining multi-turn dialogue history.
 
 2. **[Infilling Guideline](./guides/Infilling_guideline.md)**: This guide explains the VSCode extension official infilling format, covering general infilling, cross-file infilling, and generating a new file in a repository.

@@ -92,7 +92,7 @@ python -m vllm.entrypoints.openai.api_server \
 ## 用户指南
 我们为 CodeGeeX4-ALL-9B 提供了用户指南，帮助用户快速了解和使用该模型：
 
-![ALL Fuctions](./resources/all_functions.jpg)
+![ALL Fuctions](./resources/all_functions_zh.jpg)
 
 1. **[系统提示指南](./guides/System_prompt_guideline_zh.md)**：本指南介绍了如何在 CodeGeeX4-ALL-9B 中使用系统提示，包括 VSCode 插件的官方系统提示、自定义系统提示以及维护多轮对话历史的一些技巧。
 
