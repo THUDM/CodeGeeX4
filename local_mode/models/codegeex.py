@@ -43,24 +43,23 @@ class CodegeexChatModel:
                 "do_sample": True if request.temperature else request.temperature,
             }
             length = 0
-            for i, outputs in enumerate(self.model.stream_generate(**inputs, **gen_configs)):
+            for outputs in self.model.stream_generate(**inputs, **gen_configs):
                 response = self.tokenizer.decode(outputs.tolist()[0][len(inputs["input_ids"][0]):-1])
                 if not response or response[-1] == "�":
                     continue
                 resp = ChatCompletionStreamResponse()
-                resp.choices[0].index = i
                 resp.choices[0].delta.content = response[length:]
-                event = Event(id=resp.id, data=resp.json(), event='message')
+                event = Event(data=resp.json(), event='message')
                 yield event.dump()
                 length = len(response)
             resp = ChatCompletionStreamResponse()
             resp.choices[0].finish_reason = 'stop'
-            event = Event(id=resp.id, data=resp.json(), event='message')
+            event = Event(data=resp.json(), event='message')
             yield event.dump()
         except Exception as e:
             resp = ChatCompletionStreamResponse()
             resp.choices[0].finish_reason = 'stop'
-            event = Event(id=resp.id, data=f"请求报错，错误原因：{e}", event='message')
+            event = Event(data=f"请求报错，错误原因：{e}", event='message')
             yield event.dump()
 
     def chat(self, request: ChatCompletionRequest):

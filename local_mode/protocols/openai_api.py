@@ -10,6 +10,8 @@ from typing import Literal
 import shortuuid
 from pydantic import BaseModel
 
+completion_id = f"chatcmpl-{shortuuid.random()}"
+
 
 class ChatMessage(BaseModel):
     role: str
@@ -39,7 +41,7 @@ class ChatCompletionResponseStreamChoice(BaseModel):
 
 
 class ChatCompletionStreamResponse(BaseModel):
-    id: str = f"chatcmpl-{shortuuid.random()}"
+    id: str = completion_id
     object: str = "chat.completion.chunk"
     created: int = int(time.time())
     model: str = "codegeex4"
