@@ -25,7 +25,7 @@ python main.py
 
 ## Explanation
 
-### 1. Single Call of Multiple Tools
+### 1. Single Call from Multiple Tools
 
 In the example script, only one tool is provided as a candidate. However, you can also provide multiple tools as candidates as needed.
 Here is an example:
@@ -87,7 +87,7 @@ The following result is obtained
 [{'name': 'Cooking/queryDish', 'arguments': {'cuisine': 'Sichuan cuisine', 'dish': 'Kung-Pao Chicken'}}]
 ```
 
-### 2. Multiple Invocations of Multiple Tools
+### 2. Multiple Calls from Multiple Tools
 
 Additionally, for complex problems, the model has the ability to select and call multiple tools from the candidates. Here is an example:
 
