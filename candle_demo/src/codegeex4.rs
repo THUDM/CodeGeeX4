@@ -1,7 +1,7 @@
-use candle_transformers::models::with_tracing::{linear_b as linear, Linear};
-use candle_core::{DType, Device, IndexOp, Module, Result, Tensor, D};
 use candle_core as candle;
+use candle_core::{DType, Device, IndexOp, Module, Result, Tensor, D};
 use candle_nn::VarBuilder;
+use candle_transformers::models::with_tracing::{linear_b as linear, Linear};
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -30,7 +30,7 @@ impl Config {
     pub fn codegeex4() -> Self {
         Self {
             num_layers: 40,
-	    padded_vocab_size: 151552,
+            padded_vocab_size: 151552,
             hidden_size: 4096,
             ffn_hidden_size: 13696,
             kv_channels: 128,
@@ -68,7 +68,8 @@ impl RotaryEmbedding {
         let inv_freq_len = inv_freq.len();
         let inv_freq = Tensor::from_vec(inv_freq, (1, inv_freq_len), dev)?.to_dtype(dtype)?;
         let t = Tensor::arange(0u32, cfg.seq_length as u32, dev)?
-            .to_dtype(dtype).expect("unalbe to dytpe in Rotray Embedding new")
+            .to_dtype(dtype)
+            .expect("unalbe to dytpe in Rotray Embedding new")
             .reshape((cfg.seq_length, 1))?;
         let freqs = t.matmul(&inv_freq)?;
         let cache = Tensor::stack(&[&freqs.cos()?, &freqs.sin()?], D::Minus1)?;
@@ -106,17 +107,18 @@ impl RotaryEmbedding {
 struct CoreAttention {
     coeff: Option<f64>,
     norm_factor: f64,
+    dtype: DType,
 }
 
-fn masked_fill(on_false: &Tensor, mask: &Tensor, on_true: f32) -> Result<Tensor> {
+fn masked_fill(on_false: &Tensor, mask: &Tensor, on_true: f32,dtype:DType) -> Result<Tensor> {
     let shape = mask.shape();
     let on_true = Tensor::new(on_true, on_false.device())?.broadcast_as(shape.dims())?;
-    let m = mask.where_cond(&on_true, on_false)?;
+    let m = mask.where_cond(&on_true.to_dtype(dtype)?, on_false)?;
     Ok(m)
 }
 
 impl CoreAttention {
-    fn new(layer_number: usize, cfg: &Config) -> Result<Self> {
+    fn new(layer_number: usize, cfg: &Config,dtype: DType) -> Result<Self> {
         let norm_factor = (cfg.kv_channels as f64).sqrt();
         let (norm_factor, coeff) = if cfg.apply_query_key_layer_scaling {
             let coeff = f64::max(1.0, layer_number as f64);
@@ -124,7 +126,7 @@ impl CoreAttention {
         } else {
             (norm_factor, None)
         };
-        Ok(Self { coeff, norm_factor })
+        Ok(Self { coeff, norm_factor, dtype})
     }
 
     fn forward(
@@ -144,8 +146,8 @@ impl CoreAttention {
             query_layer.reshape((output_size.2, output_size.0 * output_size.1, ()))?;
         let key_layer = key_layer.reshape((output_size.3, output_size.0 * output_size.1, ()))?;
         let matmul_result = Tensor::matmul(
-            &query_layer.transpose(0, 1)?,
-            &key_layer.transpose(0, 1)?.transpose(1, 2)?,
+            &query_layer.transpose(0, 1)?.contiguous()?,
+            &key_layer.transpose(0, 1)?.transpose(1, 2)?.contiguous()?,
         )?;
         let matmul_result = (matmul_result / self.norm_factor)?.reshape(output_size)?;
         let matmul_result = match self.coeff {
@@ -157,6 +159,7 @@ impl CoreAttention {
                 &matmul_result,
                 &mask.broadcast_left((matmul_result.dim(0)?, matmul_result.dim(1)?))?,
                 f32::NEG_INFINITY,
+		self.dtype,
             )?,
             None => matmul_result,
         };
@@ -172,7 +175,7 @@ impl CoreAttention {
             value_layer.reshape((value_layer.dim(0)?, output_size.0 * output_size.1, ()))?;
         let attention_probs =
             attention_probs.reshape((output_size.0 * output_size.1, output_size.2, ()))?;
-        let context_layer = Tensor::matmul(&attention_probs, &value_layer.transpose(0, 1)?)?;
+        let context_layer = Tensor::matmul(&attention_probs.contiguous()?, &value_layer.transpose(0, 1)?.contiguous()?)?;
         let context_layer = context_layer.reshape(output_size)?;
         let context_layer = context_layer.permute((2, 0, 1, 3))?.contiguous()?;
         context_layer.flatten_from(D::Minus2)
@@ -206,7 +209,7 @@ impl SelfAttention {
             cfg.add_bias_linear || cfg.add_qkv_bias,
             vb.pp("query_key_value"),
         )?;
-        let core_attention = CoreAttention::new(layer_number, cfg)?;
+        let core_attention = CoreAttention::new(layer_number, cfg,vb.dtype())?;
         let dense = linear(
             cfg.hidden_size,
             cfg.hidden_size,
@@ -455,11 +458,11 @@ impl Transformer {
     fn new(cfg: &Config, vb: VarBuilder) -> Result<Self> {
         let vb_l = vb.pp("layers");
         let mut layers = Vec::with_capacity(cfg.num_layers);
-	println!("transofrmer layers create");
-	let mut count = 0;
+        println!("transofrmer layers create");
+        let mut count = 0;
         for layer_index in 0..cfg.num_layers {
-	    count += 1;
-	    println!("for layer index in {} total is {} ",count, cfg.num_layers);
+            count += 1;
+            println!("for layer index in {} total is {} ", count, cfg.num_layers);
             let block = Block::new(layer_index + 1, cfg, vb_l.pp(layer_index))?;
             layers.push(block)
         }
@@ -564,8 +567,7 @@ impl Model {
             false,
             vb.pp("output_layer"),
         )?;
-	
-	
+
         Ok(Self {
             embedding,
             encoder,

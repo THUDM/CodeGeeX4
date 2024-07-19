@@ -1,11 +1,11 @@
 ![](../resources/candle_example.png)
 [English](./README.md) | [中文](./README_zh.md)
-# CPU Runing
+# CPU运行
 ```
 cargo run --release -- --prompt your prompt
 ```
 
-# Use
+# 使用
 ``` shell
 Codegeex4
 
@@ -45,3 +45,10 @@ Options:
   -V, --version
           Print version
 ```
+# Cuda运行
+- 注意 需要cuda为>=12.4以上的版本
+```
+cargo build --release --features cuda
+./target/release/codegeex4-candle --prompt your prompt
+```
+
