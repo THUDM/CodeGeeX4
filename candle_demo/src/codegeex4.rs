@@ -112,7 +112,7 @@ struct CoreAttention {
 fn masked_fill(on_false: &Tensor, mask: &Tensor, on_true: f32) -> Result<Tensor> {
     let shape = mask.shape();
     let on_true = Tensor::new(on_true, on_false.device())?.broadcast_as(shape.dims())?;
-    let m = mask.where_cond(&on_true, on_false)?;
+    let m = mask.where_cond(&on_true.to_dtype(DType::BF16)?, on_false)?;
     Ok(m)
 }
 
@@ -145,8 +145,8 @@ impl CoreAttention {
             query_layer.reshape((output_size.2, output_size.0 * output_size.1, ()))?;
         let key_layer = key_layer.reshape((output_size.3, output_size.0 * output_size.1, ()))?;
         let matmul_result = Tensor::matmul(
-            &query_layer.transpose(0, 1)?,
-            &key_layer.transpose(0, 1)?.transpose(1, 2)?,
+            &query_layer.transpose(0, 1)?.contiguous()?,
+            &key_layer.transpose(0, 1)?.transpose(1, 2)?.contiguous()?,
         )?;
         let matmul_result = (matmul_result / self.norm_factor)?.reshape(output_size)?;
         let matmul_result = match self.coeff {
@@ -173,7 +173,7 @@ impl CoreAttention {
             value_layer.reshape((value_layer.dim(0)?, output_size.0 * output_size.1, ()))?;
         let attention_probs =
             attention_probs.reshape((output_size.0 * output_size.1, output_size.2, ()))?;
-        let context_layer = Tensor::matmul(&attention_probs, &value_layer.transpose(0, 1)?)?;
+        let context_layer = Tensor::matmul(&attention_probs.contiguous()?, &value_layer.transpose(0, 1)?)?;
         let context_layer = context_layer.reshape(output_size)?;
         let context_layer = context_layer.permute((2, 0, 1, 3))?.contiguous()?;
         context_layer.flatten_from(D::Minus2)
