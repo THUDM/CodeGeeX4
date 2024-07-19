@@ -1,3 +1,5 @@
+![](../resources/candle_example.png)
+[English](./README.md) | [中文](./README_zh.md)
 # CPU运行
 ```
 cargo run --release -- --prompt your prompt
