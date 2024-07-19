@@ -173,7 +173,7 @@ impl CoreAttention {
             value_layer.reshape((value_layer.dim(0)?, output_size.0 * output_size.1, ()))?;
         let attention_probs =
             attention_probs.reshape((output_size.0 * output_size.1, output_size.2, ()))?;
-        let context_layer = Tensor::matmul(&attention_probs.contiguous()?, &value_layer.transpose(0, 1)?)?;
+        let context_layer = Tensor::matmul(&attention_probs.contiguous()?, &value_layer.transpose(0, 1)?.contiguous()?)?;
         let context_layer = context_layer.reshape(output_size)?;
         let context_layer = context_layer.permute((2, 0, 1, 3))?.contiguous()?;
         context_layer.flatten_from(D::Minus2)
