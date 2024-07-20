@@ -142,7 +142,7 @@ struct Args {
     cpu: bool,
 
     /// Display the token for the specified prompt.
-    #[arg(long)]
+    #[arg(long,default_value_t=true)]
     verbose_prompt: bool,
 
     #[arg(long)]
