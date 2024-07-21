@@ -90,6 +90,7 @@ python -m vllm.entrypoints.openai.api_server \
 ```
 
 ### Rust-candle
+Codegeex4现已支持Candle框架 [Repo](https://github.com/huggingface/candle/blob/main/candle-examples/examples/codegeex4-9b/README.org)
 #### 构建
 Use Rust to launch [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b):
 ``` shell

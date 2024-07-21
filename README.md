@@ -88,6 +88,7 @@ python -m vllm.entrypoints.openai.api_server \
 ```
 
 ### Rust-candle
+Codegeex4 now suport Candle framwork [Repo](https://github.com/huggingface/candle/blob/main/candle-examples/examples/codegeex4-9b/README.org)
 #### Build
 Use Rust to launch [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b):
 ``` shell
