@@ -87,6 +87,18 @@ python -m vllm.entrypoints.openai.api_server \
      --trust_remote_code
 ```
 
+### Rust-candle
+#### Build
+Use Rust to launch [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b):
+``` shell
+	cd candle_demo
+	cargo build --release --features cuda # for Cuda
+	cargo build --release # for cpu
+	./target/release/codegeex4-candle --sample-len 512
+```
+
+
+
 ## Tutorials
 CodeGeeX4-ALL-9B provides three user guides to help users quickly understand and use the model:
 
