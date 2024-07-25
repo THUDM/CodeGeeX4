@@ -30,7 +30,7 @@ model_name = "codegeex4-all-9b"
 
 3. 在.env文件中填写对应模型信息和bing_search_api（如果需要体验联网查询），并且在聊天的时候在输入框左侧打开
 联网查询开关，默认关闭。
-![](https://github.com/user-attachments/assets/66b7077d-3db5-4add-9f1e-c8f0bd8664c9)
+![](https://github.com/user-attachments/assets/e9d9b620-cfc7-4c2d-bedc-a01d41f79e29)
 4. 安装依赖：`pip install -r requirements.txt`
 5. 运行应用：`chainlit run run.py --port 8899`
 

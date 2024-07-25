@@ -28,7 +28,7 @@ model_name = "codegeex4-all-9b"
 ```
 
 3. Fill in the corresponding model information and `bing_search_api` (if you want to experience online queries) in the .env file. Turn on the online query switch on the left side of the input box during the chat, which is off by default.
-![](https://github.com/user-attachments/assets/66b7077d-3db5-4add-9f1e-c8f0bd8664c9)
+![](https://github.com/user-attachments/assets/e9d9b620-cfc7-4c2d-bedc-a01d41f79e29)
 4. Install dependencies: `pip install -r requirements.txt`
 5. Run the application: `chainlit run run.py --port 8899`
 
