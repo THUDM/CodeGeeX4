@@ -9,7 +9,7 @@ This is a simple demo application designed to showcase multi-turn conversations 
 - Supports online Q&A
 - Supports uploading local zip files for project Q&A and modifications
 - Supports inputting GitHub project links for Q&A and modifications
-
+![](https://github.com/user-attachments/assets/ff6f6e32-457c-4733-815b-b639e4197899)
 ## Installation
 
 1. Clone the repository locally.
