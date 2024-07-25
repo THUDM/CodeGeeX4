@@ -49,8 +49,8 @@ def tools_choose_agent(input_text):
 async def chat_profile():
     return [
         cl.ChatProfile(
-            name="联网聊天",
-            markdown_description="聊天demo：支持多轮对话。支持联网回答用户问题。默认联网，如不联网在输入框左边关闭联网功能。",
+            name="chat聊天",
+            markdown_description="聊天demo：支持多轮对话。支持联网回答用户问题（需要在输入框左边打开联网开关）。默认联网，如不联网在输入框左边关闭联网功能。",
             starters=[
                 cl.Starter(
                     label="请你用python写一个快速排序。",
@@ -107,7 +107,7 @@ async def start():
             Switch(
                 id="is_online",
                 label="CodeGeeX4 - is_online",
-                initial=True
+                initial=False
             ),
         ]
     ).send()
