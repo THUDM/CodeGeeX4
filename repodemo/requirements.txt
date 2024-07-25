@@ -2,4 +2,4 @@ chainlit==1.1.305
 beautifulsoup4
 python-dotenv
 gitpython
-openai==1.35.10
+openai==1.35.4
