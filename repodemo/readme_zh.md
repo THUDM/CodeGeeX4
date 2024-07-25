@@ -1,4 +1,5 @@
 ![](../resources/logo.jpeg)
+[English](./readme.md) | [中文](./readme_zh.md)
 ## 欢迎使用Chat Demo应用
 ![](https://github.com/user-attachments/assets/f2cb6c13-a715-4adf-bf3a-b9ca5ee165df)
 这是一个简单的演示应用程序，用于展示多轮对话和项目问答功能。
