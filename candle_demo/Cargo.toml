@@ -1,5 +1,5 @@
 [workspace]
-members = ["gui","cli", "codegeex4", "api-server"]
+members = ["cli", "codegeex4", "api-server"]
 resolver = "2"
 [workspace.package]
 version = "0.1.0"
