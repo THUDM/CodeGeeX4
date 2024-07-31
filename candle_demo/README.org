@@ -6,24 +6,15 @@ THUDM/CodeGeeX4 is a versatile model for all AI software development scenarios, 
 - [[https://codegeex.cn/][HomePage]]
 - [[https://huggingface.co/THUDM/codegeex4-all-9b][huggingface]]  
 - [[https://github.com/huggingface/candle/blob/main/candle-examples/examples/codegeex4-9b/README.org][Candle]]
-** Running with ~cuda~
 
+- 目前openai-api正在开发中  
+** Cli
 #+begin_src shell
-  cargo run --example codegeex4-9b --release --features cuda   --  --sample-len 300
+  cargo build --release -p codegeex4-cli # Cpu
+  cargo build --release -p codegeex4-cli --features cuda # if cuda is avalibe
+  ./target/release/codegeex4-cli --sample-len 500
 #+end_src
-
-** Running with ~cpu~
-#+begin_src shell
-  cargo run --example codegeex4-9b --release --cpu   --  --sample-len 300
-#+end_src
-
 ** Output_Example
-*** Input
-#+begin_src shell
-  cargo run  --release --features cuda --  --sample-len 500 
-#+end_src
-
-*** Output
 #+begin_src shell
   avx: false, neon: false, simd128: false, f16c: false
   temp: 0.95 repeat-penalty: 1.10 repeat-last-n: 64
