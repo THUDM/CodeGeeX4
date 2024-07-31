@@ -128,10 +128,11 @@ async def start():
                 cl.Action(name="url", value="url", label="上传GitHub链接"),
             ],
         ).send()
+  
         if res.get("value") == "url":
             repo_path =None
             while repo_path == None:
-                res = await cl.AskUserMessage(content="请你在下面消息框中提供GitHub仓库URL? ex：https://github.com/THUDM/CodeGeeX4", timeout=3600).send()
+                res = await cl.AskUserMessage(content="请你在下面消息框中提供GitHub仓库URL? ex：https://github.com/THUDM/CodeGeeX2", timeout=3600).send()
                 if res:
                     repo_path = clone_repo(res['output'],extract_dir)
                     if repo_path is None:
@@ -201,7 +202,6 @@ async def main(message: cl.Message):
             prompt_content = get_cur_base_user_prompt(
                     message_history=message_history,
                     index_prompt=index_prompt,
-                    judge_context=tool_name[0],
                 )
             
         else:
