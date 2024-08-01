@@ -61,6 +61,9 @@ class CodegeexChatModel:
             resp.choices[0].finish_reason = 'stop'
             event = Event(data=f"请求报错，错误原因：{e}", event='message')
             yield event.dump()
+        finally:
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
 
     def chat(self, request: ChatCompletionRequest):
         try:
@@ -79,3 +82,6 @@ class CodegeexChatModel:
             return resp.model_dump()
         except Exception as e:
             return f"请求报错，错误原因：{e}"
+        finally:
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
