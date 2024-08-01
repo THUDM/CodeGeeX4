@@ -133,13 +133,18 @@ def get_directory_structure(directory_path):
     structure = []
 
     for root, dirs, files in os.walk(directory_path):
+        # Check if the current directory is .git and skip if it is
+        if '.git' in root.split(os.sep):
+            continue
+        
         level = root.replace(directory_path, '').count(os.sep)
         indent = ' ' * 4 * level
         structure.append(f"{indent}{os.path.basename(root)}/")
+        
         sub_indent = ' ' * 4 * (level + 1)
         for file in files:
             structure.append(f"{sub_indent}{file}")
-
+    
     return "\n".join(structure)
 
 def filter_data(obj):
