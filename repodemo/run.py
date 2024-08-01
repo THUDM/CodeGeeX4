@@ -9,7 +9,8 @@ from prompts.base_prompt import (
     get_cur_base_user_prompt,
     build_message_list,
     tools_choose_prompt,
-    tools_input_prompt
+    tools_input_prompt,
+    file_summary_prompt
 )
 from utils.bingsearch import bing_search_prompt
 from utils.tools import extract_code_text, get_directory_structure, get_mermaid_png, unzip_file, get_project_files_with_content,clone_repo,is_valid_json
@@ -154,8 +155,19 @@ async def start():
             repo_path = unzip_file(text_file.path, extract_dir)
         files_list = get_project_files_with_content(repo_path)
         cl.user_session.set("project_index", files_list)
+        
         if len(files_list) > 0:
+            
             structure_str = await directory_structure(repo_path)
+            #TODO: 项目文件太多，需要分批处理，这里暂时只取前5个文件
+            top_files_list = sorted(files_list, key=lambda x: len(x["path"]))[:5]
+            index_prompt = ""
+            index_tmp = """###PATH:{path}\n{code}\n"""
+            for index in top_files_list:
+                index_prompt += index_tmp.format(path=index["path"], code=index["content"])
+            file_summary_message_history=[{"role": "user", "content": index_prompt+'\n'+file_summary_prompt}]
+            file_summary_prompt_content = get_cur_base_user_prompt(message_history=file_summary_message_history)
+            file_summary = codegeex4(file_summary_prompt_content, temperature=temperature, top_p=top_p)
             # index_prompt = ""
             # index_tmp = """###PATH:{path}\n{code}\n"""
             # for index in files_list:
@@ -185,11 +197,11 @@ async def start():
                     else:
                         is_bad = True
                 if is_bad:
-                    await cl.Message("架构图生成失败。但不影响后续项目问答。").send()
+                    await cl.Message(f"架构图生成失败。但不影响后续项目问答。\n{file_summary}\n- ......").send()
                 else:
                     img_mermard_structure = cl.Image(path=mermaid_structure, name="structure", display="inline",size="large")
                     await cl.Message(
-                    content=f"已成功上传，这是项目的目录架构图，您可以开始对项目进行提问！",
+                    content=f"已成功上传，这是项目的目录架构图，您可以开始对项目进行提问！\n{file_summary}\n- ......",
                     elements=[img_mermard_structure],
                 ).send()
             else:

@@ -2,6 +2,8 @@ base_system_prompt = """<|system|>\n你是一位智能编程助手，你叫CodeG
 
 project_mermaid_prompt = """请你根据项目目录为这个项目生成一个架构图。请使用mermaid语言生成这个项目的核心架构图，请你确保mermaid的逻辑是正确的且能被解析的，只需要输出mermaid，需要graph LR形式，尽量精简节点，过滤掉对理解项目无关紧要的节点（ex：二进制文件，git文件，日志文件等等），只保留核心节点。"""
 
+file_summary_prompt = """请你为每个文件提供一句话的总结，描述这个文件的作用、内容、格式等等。输出格式：-filename: 文件名\n-summary: 文件总结 """
+
 web_search_prompy = """你将接收到一个用户提出的问题，并请撰写清晰、简洁且准确的答案。
 
 # Note
