@@ -155,38 +155,48 @@ async def start():
         files_list = get_project_files_with_content(repo_path)
         cl.user_session.set("project_index", files_list)
         if len(files_list) > 0:
-            await directory_structure(repo_path)
+            structure_str = await directory_structure(repo_path)
 
             index_prompt = ""
             index_tmp = """###PATH:{path}\n{code}\n"""
             for index in files_list:
                 index_prompt += index_tmp.format(path=index["path"], code=index["content"])
-            message_history=[{"role": "user", "content": project_mermaid_prompt}]
-            prompt_content = get_cur_base_user_prompt(message_history=message_history, index_prompt=index_prompt)
+            message_history=[{"role": "user", "content": structure_str+project_mermaid_prompt}]
+            prompt_content = get_cur_base_user_prompt(message_history=message_history)
+            # prompt_content.insert(-1,{"role": "user", "content": project_mermaid_prompt})
             print(prompt_content)
             if len(prompt_content) / 4 < 120000:
                 mermaid_structure = repo_path+"/structure.png"
+                is_bad = False
                 if not os.path.exists(mermaid_structure):
                     result_mermaid = ""
-                    while result_mermaid == "":
+                    retry_attempts = 2
+                    for _ in range(retry_attempts):
                         stream = codegeex4(prompt_content, temperature=temperature, top_p=top_p)
-                        
+                        print(stream)
                         for part in stream:
                             if token := (part or " "):
                                 result_mermaid+=token
 
                         result_mermaid = extract_code_text(result_mermaid, "mermaid")
-        
-                    mermaid_structure = repo_path+"/structure.png"
-
-                    get_mermaid_png(result_mermaid,mermaid_structure)
-                img_mermard_structure = cl.Image(path=mermaid_structure, name="structure", display="inline",size="large")
-                await cl.Message(
+                        if result_mermaid!="":
+                            break
+                    
+                    if result_mermaid:
+                        get_mermaid_png(result_mermaid,mermaid_structure)
+                    else:
+                        is_bad = True
+                if is_bad:
+                    await cl.Message("架构图生成失败。但不影响后续项目问答。").send()
+                else:
+                    img_mermard_structure = cl.Image(path=mermaid_structure, name="structure", display="inline",size="large")
+                    await cl.Message(
                     content=f"已成功上传，这是项目的架构图，您可以开始对项目进行提问！",
                     elements=[img_mermard_structure],
                 ).send()
             else:
                 await cl.Message("项目太大了，请换小一点的项目。").send()
+            cl.user_session.set("project_message_history", [])
             
 
             
@@ -197,6 +207,7 @@ async def directory_structure(repo_path):
     current_step.input = "加载项目目录"
     structure_str = get_directory_structure(repo_path)
     current_step.output = "```shell\n"+structure_str+"\n```"
+    return structure_str
 
 
 @cl.step(type="tool")
