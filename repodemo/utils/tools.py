@@ -4,6 +4,15 @@ import zipfile
 import git
 import urllib.parse
 import re
+import mermaid as md
+from mermaid.graph import Graph
+
+
+def get_mermaid_png(mermaid_str:str,png_file_path:str):
+    size_comment = "%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffcc00', 'edgeLabelBackground':'#ffffff', 'fontSize': 18, 'background': 'transparent', 'lineColor': '#000000' }}}%%\n"
+    graph = Graph('example-flowchart', size_comment+mermaid_str)
+    graphe = md.Mermaid(graph)
+    graphe.to_png(png_file_path)
 
 def is_valid_json(json_string):
     try:
@@ -101,7 +110,42 @@ def get_project_files_with_content(project_dir):
                 continue
 
     return files_list
+def extract_code_text(text,language):
+    
+    start_marker = f"```{language}"
+    end_marker = "```"
+    start_index = text.find(start_marker)
+    end_index = text.find(end_marker, start_index + len(start_marker))
+    # print(start_index, end_index,language)
+    if start_index == -1 or end_index == -1 or start_index >= end_index:
+        return ""
 
+    start_index += len(start_marker)
+    return text[start_index:end_index].strip()
+
+def get_directory_structure(directory_path):
+    """
+    获取指定目录下的文件结构并返回为字符串格式。
+
+    :param directory_path: str, 目录路径
+    :return: str, 文件结构
+    """
+    structure = []
+
+    for root, dirs, files in os.walk(directory_path):
+        # Check if the current directory is .git and skip if it is
+        if '.git' in root.split(os.sep):
+            continue
+        
+        level = root.replace(directory_path, '').count(os.sep)
+        indent = ' ' * 4 * level
+        structure.append(f"{indent}{os.path.basename(root)}/")
+        
+        sub_indent = ' ' * 4 * (level + 1)
+        for file in files:
+            structure.append(f"{sub_indent}{file}")
+    
+    return "\n".join(structure)
 
 def filter_data(obj):
     LANGUAGE_TAG = {

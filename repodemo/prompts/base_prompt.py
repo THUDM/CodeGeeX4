@@ -1,6 +1,8 @@
 base_system_prompt = """<|system|>\n你是一位智能编程助手，你叫CodeGeeX。你会为用户回答关于编程、代码、计算机方面的任何问题，并提供格式规范、可以执行、准确安全的代码，并在必要时提供详细的解释。"""
 
-repo_system_prompt = """<|system|>\n你是一位智能编程助手，你叫CodeGeeX。你会为用户回答关于编程、代码、计算机方面的任何问题，并提供格式规范、可以执行、准确安全的代码。请根据用户给出的项目仓库中的代码，以及用户提出的需求，生成新的代码或者更改已有代码。输出格式：\n\n###PATH:{PATH}\n{CODE}"""
+project_mermaid_prompt = """请你根据项目目录为这个项目生成一个架构图。请使用mermaid语言生成这个项目的核心架构图，请你确保mermaid的逻辑是正确的且能被解析的，只需要输出mermaid，需要graph LR形式，尽量精简节点，过滤掉对理解项目无关紧要的节点（ex：二进制文件，git文件，日志文件等等），只保留核心节点。"""
+
+file_summary_prompt = """请你为每个文件提供一句话的总结，描述这个文件的作用、内容、格式等等。输出格式：-filename: 文件名\n-summary: 文件总结 """
 
 web_search_prompy = """你将接收到一个用户提出的问题，并请撰写清晰、简洁且准确的答案。
 
@@ -37,8 +39,7 @@ Here is some examples about tools choosing:
 Input:
 tools_summary: {
     "online_query": "Questions need to be queried on the Internet to ensure accurate answers",
-    "project_qa": "Questions need to be answered specific to the project",
-    "project_modify": "The problem is that we need to modify the project"
+    "project_qa": "Questions need to be answered specific to the project"
 }
 input_text: "今天星期几"
 
@@ -56,33 +57,12 @@ Output:
 }
 
 
-Input:
-tools_summary: {
-    "online_query": "Questions need to be queried on the Internet to ensure accurate answers",
-    "project_qa": "Questions need to be answered specific to the project",
-    "project_modify": "The problem is that we need to modify the project"
-}
-input_text: "请你帮我把项目的readme改成韩文"
-
-Output:
-{
-    "thoughts": {
-        "text": "用户需要将项目的readme文件翻译成韩文。",
-        "reasoning": "根据工具概要，project_modify专用于项目修改，这与用户的需求相符。",
-        "criticism": "需要确保用户对翻译后的韩文内容满意，因为翻译质量可能影响项目的整体感受。",
-        "speak": "我们将使用project_modify来修改项目的readme文件。请确认您希望使用的韩文翻译内容。"
-    },
-    "tool": {
-        "name": ["project_modify"]
-    }
-}
 
 
 Input:
 tools_summary: {
     "online_query": "Questions need to be queried on the Internet to ensure accurate answers",
-    "project_qa": "Questions need to be answered specific to the project",
-    "project_modify": "The problem is that we need to modify the project"
+    "project_qa": "Questions need to be answered specific to the project"
 }
 input_text: "你是谁"
 
@@ -102,8 +82,7 @@ Output:
 Input:
 tools_summary: {
     "online_query": "Questions need to be queried on the Internet to ensure accurate answers",
-    "project_qa": "Questions need to be answered specific to the project",
-    "project_modify": "The problem is that we need to modify the project"
+    "project_qa": "Questions need to be answered specific to the project"
 }
 input_text: "解释一下项目"
 
@@ -148,8 +127,7 @@ Don't output in markdown format, something like ```json or ```,just output in th
 Input:
 tools_summary: {
     "online_query": "Questions need to be queried on the Internet to ensure accurate answers",
-    "project_qa": "Questions need to be answered specific to the project",
-    "project_modify": "The problem is that we need to modify the project"
+    "project_qa": "Questions need to be answered specific to the project"
 }
 """
 tools_input_prompt = """
@@ -172,7 +150,7 @@ def build_message_list(result):
 
     return message_list
 
-def get_cur_base_user_prompt(message_history, index_prompt=None, judge_context=""):
+def get_cur_base_user_prompt(message_history, index_prompt=None):
     user_prompt_tmp = """<|user|>\n{user_input}"""
     assistant_prompt_tmp = """<|assistant|>\n{assistant_input}"""
     history_prompt = ""
@@ -188,10 +166,9 @@ def get_cur_base_user_prompt(message_history, index_prompt=None, judge_context="
             )
 
 
-    if "project_modify" not in judge_context:
-        result = base_system_prompt + history_prompt + """<|assistant|>\n"""
-    else:
-        result = repo_system_prompt + history_prompt + """<|assistant|>\n"""
+
+    result = base_system_prompt + history_prompt + """<|assistant|>\n"""
+   
     
     message_list = build_message_list(result)
     # print(message_list)

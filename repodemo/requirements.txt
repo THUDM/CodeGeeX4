@@ -3,3 +3,5 @@ beautifulsoup4
 python-dotenv
 gitpython
 openai==1.35.4
+
+mermaid-py
