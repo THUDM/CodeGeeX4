@@ -89,6 +89,16 @@ python -m vllm.entrypoints.openai.api_server \
      --trust_remote_code
 ```
 
+### Rust-candle
+Codegeex4现已支持Candle框架 [Repo](https://github.com/huggingface/candle/blob/main/candle-examples/examples/codegeex4-9b/README.org)
+
+Use Rust to launch [codegeex4-all-9b](https://huggingface.co/THUDM/codegeex4-all-9b):
+``` shell
+	cd candle_demo
+	cargo build -p codegeex4-cli --release --features cuda # for Cuda
+	cargo build -p codegeex4-cli --release # for cpu
+	./target/release/codegeex4-cli --sample-len 512
+```
 ## 用户指南
 我们为 CodeGeeX4-ALL-9B 提供了用户指南，帮助用户快速了解和使用该模型：
 
