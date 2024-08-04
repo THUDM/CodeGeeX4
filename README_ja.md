@@ -10,7 +10,7 @@
 
 | モデル             | タイプ | シーケンス長 | ダウンロード                                                                                                                                                                                                    |
 |-------------------|------|------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| codegeex4-all-9b  | チャット | 128K       | [🤗 Huggingface](https://huggingface.co/THUDM/codegeex4-all-9b) [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/codegeex4-all-9b) [🟣 WiseModel](https://wisemodel.cn/models/ZhipuAI/codegeex4-all-9b)    |
+| codegeex4-all-9b  | チャット | 128K       | [🤗 Hugging Face](https://huggingface.co/THUDM/codegeex4-all-9b) [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/codegeex4-all-9b) [🟣 WiseModel](https://wisemodel.cn/models/ZhipuAI/codegeex4-all-9b)    |
 
 ## クイックスタート
 
@@ -132,7 +132,7 @@ CRUXEvalでは、コードの推論、理解、および実行能力をテスト
   <img src="./metric/pics/NIAH_ALL.png" alt="画像2の説明" width="45%">
 </p>
 
-評価結果の詳細は**[評価](./metric/README.md)**で確認できます。
+評価結果の詳細は **[評価](./metric/README.md)** で確認できます。
 
 
 
