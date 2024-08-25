@@ -4,7 +4,7 @@
     🏠 <a href="https://codegeex.cn" target="_blank">Homepage</a>｜🛠 Extensions <a href="https://marketplace.visualstudio.com/items?itemName=aminer.codegeex" target="_blank">VS Code</a>, <a href="https://plugins.jetbrains.com/plugin/20587-codegeex" target="_blank">Jetbrains</a>｜🤗 <a href="https://huggingface.co/THUDM/codegeex4-all-9b" target="_blank">HF Repo</a> | 🪧 <a href="https://huggingface.co/spaces/THUDM/CodeGeeX" target="_blank">HF DEMO</a>
 </p>
 
-[English](./README.md) | [中文](./README_zh.md)
+[English](./README.md) | [中文](./README_zh.md) | [日本語](./README_ja.md)
 
 # CodeGeeX4: 全能的开源多语言代码生成模型
 
