@@ -2,19 +2,6 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-// #[derive(Debug, Clone, Serialize, Deserialize)]
-// pub struct Messages {
-//     pub role: String,
-//     pub content: String,
-// }
-
-// #[derive(Debug, Clone, Serialize, Deserialize)]
-// pub enum StopTokens {
-//     Multi(Vec<String>),
-//     Single(String),
-// }
-
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ChatCompletionChunk {
     pub id: String,
@@ -42,8 +29,8 @@ pub struct ChatCompletionRequest {
     pub top_p: Option<f32>, //1.0
     #[serde(default)]
     pub max_tokens: Option<usize>, //None
-    // #[serde(default)]
-    // pub stop: Option<StopTokens>,
+    #[serde(default)]
+    pub stop: Option<String>,
     #[serde(default)]
     presence_penalty: Option<f32>,
 }
@@ -66,15 +53,12 @@ pub struct ChatCompletionResponseStream {
     pub object: String,
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ChatChoice {
     pub index: usize,
     pub message: ChatChoiceData,
     pub finish_reason: Option<String>,
     pub logprobs: Option<String>,
-    
-
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -83,14 +67,12 @@ pub struct ChatChoiceStream {
     pub delta: ChatChoiceData,
     pub finish_reason: Option<String>,
     pub logprobs: Option<String>,
-
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ChatChoiceData {
     pub role: String,
     pub content: Option<String>,
-    
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ChatCompletionUsageResponse {
@@ -102,5 +84,3 @@ pub struct ChatCompletionUsageResponse {
     pub prompt_time_costs: usize,
     pub completion_time_costs: usize,
 }
-
-

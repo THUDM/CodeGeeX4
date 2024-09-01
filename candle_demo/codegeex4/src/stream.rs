@@ -1,14 +1,12 @@
-use crate::api::ChatCompletionResponse;
-
 use crate::api::ChatCompletionChunk;
 use axum::response::sse::Event;
 use flume::Receiver;
 use futures::Stream;
+use owo_colors::OwoColorize;
 use std::{
     pin::Pin,
     task::{Context, Poll},
 };
-
 #[derive(PartialEq)]
 pub enum StreamingStatus {
     Uninitilized,
@@ -36,41 +34,36 @@ impl Stream for Streamer {
             return Poll::Ready(None);
         }
         match self.rx.try_recv() {
-            Ok(resp) => {
-		
-	
-		match resp {
-                    ChatResponse::InternalError(e) => Poll::Ready(Some(Ok(Event::default().data(e)))),
-                    ChatResponse::ValidationError(e) => Poll::Ready(Some(Ok(Event::default().data(e)))),
-                    ChatResponse::ModelError(e) => Poll::Ready(Some(Ok(Event::default().data(e)))),
-                    ChatResponse::Chunk(response) => {
-			println!("模型响应\t{:?}",response);
-			if self.status != StreamingStatus::Started {
-                            self.status = StreamingStatus::Started;
-			}
-			Poll::Ready(Some(Event::default().json_data(response)))
+            Ok(resp) => match resp {
+                ChatResponse::InternalError(e) => Poll::Ready(Some(Ok(Event::default().data(e)))),
+                ChatResponse::ValidationError(e) => Poll::Ready(Some(Ok(Event::default().data(e)))),
+                ChatResponse::ModelError(e) => Poll::Ready(Some(Ok(Event::default().data(e)))),
+                ChatResponse::Chunk(response) => {
+                    if self.status != StreamingStatus::Started {
+                        self.status = StreamingStatus::Started;
                     }
-                    ChatResponse::Done => {
-			println!("发送done");
-			self.status = StreamingStatus::Stopped;
-			Poll::Ready(Some(Ok(Event::default().data("[DONE]"))))
-                    }
-		}
-		
-	    },
-
-            Err(e) => {{
-		println!("通道无流信息 关闭中");
-                if self.status == StreamingStatus::Started && e == flume::TryRecvError::Disconnected
-                {
-                    //no TryRecvError::Disconnected returned even if the client closed the stream or disconnected
-                    self.status = StreamingStatus::Interrupted;
-                    Poll::Ready(None)
-                } else {
-		    println!("close");
-                    Poll::Pending
+                    Poll::Ready(Some(Event::default().json_data(response)))
                 }
-            }}
+                ChatResponse::Done => {
+                    println!("{}", "SSE通道关闭".yellow());
+                    self.status = StreamingStatus::Stopped;
+                    Poll::Ready(Some(Ok(Event::default().data("[DONE]"))))
+                }
+            },
+
+            Err(e) => {
+                {
+                    if self.status == StreamingStatus::Started
+                        && e == flume::TryRecvError::Disconnected
+                    {
+                        //no TryRecvError::Disconnected returned even if the client closed the stream or disconnected
+                        self.status = StreamingStatus::Interrupted;
+                        Poll::Ready(None)
+                    } else {
+                        Poll::Pending
+                    }
+                }
+            }
         }
     }
 }

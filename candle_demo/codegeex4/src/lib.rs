@@ -1,21 +1,21 @@
 pub mod codegeex4;
 
-pub mod args;
 pub mod api;
+pub mod args;
 pub mod stream;
-use api::ChatChoice;
 use api::ChatChoiceData;
 use api::ChatChoiceStream;
+use api::ChatCompletionChunk;
 use candle_core::{DType, Device, Tensor};
 use candle_transformers::generation::LogitsProcessor;
 use codegeex4::*;
+
 use flume::Sender;
 use owo_colors::{self, OwoColorize};
 use std::io::BufRead;
 use std::io::BufReader;
-use api::ChatCompletionChunk;
-use tokenizers::Tokenizer;
 use stream::ChatResponse;
+use tokenizers::Tokenizer;
 pub struct TextGeneration {
     model: Model,
     device: Device,
@@ -183,108 +183,109 @@ impl TextGenerationApiServer {
         }
     }
 
-    pub fn run(&mut self,prompt:String, sample_len: usize,sender:Sender<ChatResponse>) -> () {
-        // 从标准输入读取prompt
-            let tokens = self.tokenizer.encode(prompt, true).expect("tokens error");
-            if tokens.is_empty() {
-                panic!("Empty prompts are not supported in the chatglm model.")
+    pub fn run(&mut self, prompt: String, sample_len: usize, sender: Sender<ChatResponse>) -> () {
+        let tokens = self.tokenizer.encode(prompt, true).expect("tokens error");
+        if tokens.is_empty() {
+            panic!("Empty prompts are not supported in the chatglm model.")
+        }
+        if self.verbose_prompt {
+            for (token, id) in tokens.get_tokens().iter().zip(tokens.get_ids().iter()) {
+                let token = token.replace('▁', " ").replace("<0x0A>", "\n");
+                println!("{id:7} -> '{token}'");
             }
-            if self.verbose_prompt {
-                for (token, id) in tokens.get_tokens().iter().zip(tokens.get_ids().iter()) {
-                    let token = token.replace('▁', " ").replace("<0x0A>", "\n");
-                    println!("{id:7} -> '{token}'");
-                }
-            }
-            let eos_token = match self.tokenizer.get_vocab(true).get("<|endoftext|>") {
-                Some(token) => *token,
-                None => panic!("cannot find the endoftext token"),
+        }
+        let eos_token = match self.tokenizer.get_vocab(true).get("<|endoftext|>") {
+            Some(token) => *token,
+            None => panic!("cannot find the endoftext token"),
+        };
+        let mut tokens = tokens.get_ids().to_vec();
+        let mut generated_tokens = 0usize;
+
+        let start_gen = std::time::Instant::now();
+
+        let mut result = vec![];
+
+        for index in 0..sample_len {
+            let context_size = if index > 0 { 1 } else { tokens.len() };
+            let ctxt = &tokens[tokens.len().saturating_sub(context_size)..];
+            let input = Tensor::new(ctxt, &self.device)
+                .unwrap()
+                .unsqueeze(0)
+                .expect("create tensor input error");
+            let logits = self.model.forward(&input).unwrap();
+            let logits = logits.squeeze(0).unwrap().to_dtype(self.dtype).unwrap();
+            let logits = if self.repeat_penalty == 1. {
+                logits
+            } else {
+                let start_at = tokens.len().saturating_sub(self.repeat_last_n);
+                candle_transformers::utils::apply_repeat_penalty(
+                    &logits,
+                    self.repeat_penalty,
+                    &tokens[start_at..],
+                )
+                .unwrap()
             };
-            let mut tokens = tokens.get_ids().to_vec();
-            let mut generated_tokens = 0usize;
 
-            let start_gen = std::time::Instant::now();
-
-            //            println!("\n 开始生成");
-            println!("samplelen {}", sample_len.blue());
-            let mut result = vec![];
-
-            for index in 0..sample_len {
-                let context_size = if index > 0 { 1 } else { tokens.len() };
-                let ctxt = &tokens[tokens.len().saturating_sub(context_size)..];
-                let input = Tensor::new(ctxt, &self.device)
-                    .unwrap()
-                    .unsqueeze(0)
-                    .expect("create tensor input error");
-                let logits = self.model.forward(&input).unwrap();
-                let logits = logits.squeeze(0).unwrap().to_dtype(self.dtype).unwrap();
-                let logits = if self.repeat_penalty == 1. {
-                    logits
-                } else {
-                    let start_at = tokens.len().saturating_sub(self.repeat_last_n);
-                    candle_transformers::utils::apply_repeat_penalty(
-                        &logits,
-                        self.repeat_penalty,
-                        &tokens[start_at..],
-                    )
-                    .unwrap()
-                };
-
-                let next_token = self.logits_processor.sample(&logits).unwrap();
-                tokens.push(next_token);
-                generated_tokens += 1;
-                if next_token == eos_token {
-                    break;
-                }
-                let token = self
-                    .tokenizer
-                    .decode(&[next_token], true)
-                    .expect("Token error");
-                if self.verbose_prompt {
-                    println!(
-                        "[Index: {}] [Raw Token: {}] [Decode Token: {}]",
-                        index.blue(),
-                        next_token.green(),
-                        token.yellow()
-                    );
-                }
-                result.push(token);
+            let next_token = self.logits_processor.sample(&logits).unwrap();
+            tokens.push(next_token);
+            generated_tokens += 1;
+            if next_token == eos_token {
+                break;
             }
-            let dt = start_gen.elapsed();
+            let token = self
+                .tokenizer
+                .decode(&[next_token], true)
+                .expect("Token error");
+            if self.verbose_prompt {
+                println!(
+                    "[Index: {}] [Raw Token: {}] [Decode Token: {}]",
+                    index.blue(),
+                    next_token.green(),
+                    token.yellow()
+                );
+            }
+            result.push(token);
+        }
+        let dt = start_gen.elapsed();
+        if self.verbose_prompt {
             println!(
                 "\n{generated_tokens} tokens generated ({:.2} token/s)",
                 generated_tokens as f64 / dt.as_secs_f64(),
             );
-            println!("Result:");
-            for tokens in result {
-		let chunk = ChatResponse::Chunk(build_response_chunk(tokens));
-		sender.send(chunk);
-            }
-	    sender.send(ChatResponse::Done);
-            self.model.reset_kv_cache(); // 清理模型kv
+        }
+        for tokens in result {
+            let chunk = ChatResponse::Chunk(build_response_chunk(tokens));
+            // 发送到vscode
+            let _ = sender.send(chunk);
+	    // 测试
+	    println!("send");
+        }
+        // 发送Done
+        let _ = sender.send(ChatResponse::Done);
+        self.model.reset_kv_cache(); // 清理模型kv
     }
 }
 
-fn build_response_chunk(tokens: String) -> ChatCompletionChunk{
+fn build_response_chunk(tokens: String) -> ChatCompletionChunk {
     let uuid = uuid::Uuid::new_v4();
     let completion_id = format!("chatcmpl-{}", uuid);
-    
+
     let choice_data = ChatChoiceData {
-	role: "assistant".to_string(),
+        role: "assistant".to_string(),
         content: Some(tokens),
     };
     let choice = ChatChoiceStream {
         delta: choice_data.clone(),
         //finish_reason: Some("stop".to_string()),
-	finish_reason: None,
+        finish_reason: None,
         index: 0,
-	logprobs: None,
+        logprobs: None,
     };
-    let choice_not_stream = ChatChoice {
-        message: choice_data,
-        // finish_reason: Some("stop".to_string()),
-	finish_reason: None,
-        index: 1,
-	logprobs: None,
+    return ChatCompletionChunk {
+        id: completion_id,
+        object: "chat.completion.chunk".to_string(),
+        created: 0,
+        model: "codegeex4".to_string(),
+        choices: vec![choice],
     };
-    return ChatCompletionChunk { id: completion_id, object: "chat.completion.chunk".to_string(), created: 0, model: "codegeex4".to_string(), choices: vec![choice] };
 }
