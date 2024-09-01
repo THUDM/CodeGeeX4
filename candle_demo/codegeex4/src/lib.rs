@@ -183,7 +183,7 @@ impl TextGenerationApiServer {
         }
     }
 
-    pub fn run(&mut self, prompt: String, sample_len: usize, sender: Sender<ChatResponse>) -> () {
+    pub async fn run(&mut self, prompt: String, sample_len: usize, sender: Sender<ChatResponse>) -> () {
         let tokens = self.tokenizer.encode(prompt, true).expect("tokens error");
         if tokens.is_empty() {
             panic!("Empty prompts are not supported in the chatglm model.")
@@ -202,8 +202,6 @@ impl TextGenerationApiServer {
         let mut generated_tokens = 0usize;
 
         let start_gen = std::time::Instant::now();
-
-        let mut result = vec![];
 
         for index in 0..sample_len {
             let context_size = if index > 0 { 1 } else { tokens.len() };
@@ -244,8 +242,12 @@ impl TextGenerationApiServer {
                     token.yellow()
                 );
             }
-            result.push(token);
+	    let chunk = ChatResponse::Chunk(build_response_chunk(token).await);
+	    let _ = sender.send(chunk);
+	    println!("send");
         }
+	// 发送Done
+	let _ = sender.send(ChatResponse::Done);
         let dt = start_gen.elapsed();
         if self.verbose_prompt {
             println!(
@@ -253,22 +255,11 @@ impl TextGenerationApiServer {
                 generated_tokens as f64 / dt.as_secs_f64(),
             );
         }
-        for tokens in result {
-            let chunk = ChatResponse::Chunk(build_response_chunk(tokens));
-            // 发送到vscode
-            let _ = sender.send(chunk);
-	    // 测试
-	    println!("send");
-        }
-        // 发送Done
-	println!("Done");
-        let _ = sender.send(ChatResponse::Done);
-	
         self.model.reset_kv_cache(); // 清理模型kv
     }
 }
 
-fn build_response_chunk(tokens: String) -> ChatCompletionChunk {
+async fn build_response_chunk(tokens: String) -> ChatCompletionChunk {
     let uuid = uuid::Uuid::new_v4();
     let completion_id = format!("chatcmpl-{}", uuid);
 

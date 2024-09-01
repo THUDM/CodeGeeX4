@@ -57,7 +57,7 @@ pub async fn chat(
             data.pipeline
                 .lock()
                 .unwrap()
-                .run(prompt, max_tokens, response_tx.clone());
+                .run(prompt, max_tokens, response_tx.clone()).await;
         });
     });
     println!("打开SSE");
