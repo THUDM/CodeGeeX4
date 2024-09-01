@@ -13,7 +13,7 @@ THUDM/CodeGeeX4 is a versatile model for all AI software development scenarios, 
   ./target/release/api-server 0.0.0.0:3000
 #+end_src
 
-[[file:~/project/CodeGeeX4/resources/rust-api-server.png][file:~/project/CodeGeeX4/resources/rust-api-server.png]]
+[[file:../resources/rust-api-server.png][file:../resources/rust-api-server.png]]
 
 ** Cli
 #+begin_src shell
