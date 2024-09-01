@@ -82,17 +82,6 @@ pub async fn chat(
     println!("prompt is {}", prompt);
     println!("uuid {completion_id}");
     
-    
-    let response = ChatCompletionChunk {
-        id: completion_id.clone(),
-	object: "chat.completion.chunk".to_string(),
-	model: "codegeex4".to_string(),
-	created: 0,
-        choices: vec![choice.clone()],
-        
-        
-    };
-
     if request.stream.is_some_and(|x| x==false) {
 	println!("测试链接");
 	return ChatResponder::Completion(ChatCompletionResponse{

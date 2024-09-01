@@ -7,7 +7,11 @@ THUDM/CodeGeeX4 is a versatile model for all AI software development scenarios, 
 - [[https://huggingface.co/THUDM/codegeex4-all-9b][huggingface]]  
 - [[https://github.com/huggingface/candle/blob/main/candle-examples/examples/codegeex4-9b/README.org][Candle]]
 
-- 目前openai-api正在开发中  
+** api-server
+#+begin_src shell
+  cargo build --release -p api-server --features cuda
+  ./target/release/api-server 0.0.0.0:3000
+#+end_src
 ** Cli
 #+begin_src shell
   cargo build --release -p codegeex4-cli # Cpu
@@ -86,3 +90,4 @@ THUDM/CodeGeeX4 is a versatile model for all AI software development scenarios, 
   year={2023}
 }
 #+end_src
+** Candle-vllm 利用了部分candle-vllm的代码
