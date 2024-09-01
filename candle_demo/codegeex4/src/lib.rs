@@ -261,7 +261,9 @@ impl TextGenerationApiServer {
 	    println!("send");
         }
         // 发送Done
+	println!("Done");
         let _ = sender.send(ChatResponse::Done);
+	
         self.model.reset_kv_cache(); // 清理模型kv
     }
 }
