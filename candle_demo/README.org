@@ -12,6 +12,9 @@ THUDM/CodeGeeX4 is a versatile model for all AI software development scenarios, 
   cargo build --release -p api-server --features cuda
   ./target/release/api-server 0.0.0.0:3000
 #+end_src
+
+[[file:~/project/CodeGeeX4/resources/rust-api-server.png][file:~/project/CodeGeeX4/resources/rust-api-server.png]]
+
 ** Cli
 #+begin_src shell
   cargo build --release -p codegeex4-cli # Cpu
