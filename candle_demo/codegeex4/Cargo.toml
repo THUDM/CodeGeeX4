@@ -22,9 +22,11 @@ accelerate-src = { workspace = true, optional = true}
 intel-mkl-src = { workspace = true ,optional = true}
 rand = { workspace = true}
 owo-colors = {workspace = true}
-
-
-
+flume = {workspace = true}
+serde = {workspace = true}
+axum = {workspace = true}
+futures= {workspace=true}
+uuid = {workspace=true}
 [build-dependencies]
 bindgen_cuda = { version = "0.1.1", optional = true }
 [features]
