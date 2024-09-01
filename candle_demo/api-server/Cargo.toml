@@ -23,11 +23,17 @@ intel-mkl-src = { workspace = true ,optional = true}
 rand = { workspace = true}
 owo-colors = {workspace = true}
 codegeex4 = {workspace = true}
-tokio = {version = "1.39.1", features = ["full"]}
-actix-web = "4.8.0"
-serde = { version = "1.0.204", features = ["derive"] }
-shortuuid = "0.0.1"
-short-uuid = "0.1.2"
+# for async runtime and excutor
+tokio= {workspace=true}
+
+# for api-server
+axum = {workspace= true}
+serde = {workspace=true}
+# for uuid generation
+tower-http = { version = "0.5.2", features = ["cors"] }
+uuid= {workspace=true}
+futures = {workspace = true}
+flume = {workspace=true}
 [build-dependencies]
 bindgen_cuda = { version = "0.1.1", optional = true }
 [features]
