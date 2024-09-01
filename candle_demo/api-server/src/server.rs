@@ -98,7 +98,7 @@ pub async fn chat(
     println!("打开SSE");
     let _ = tokio::task::spawn_blocking(move || {
         tokio::runtime::Handle::current().block_on(async move {
-	    data.pipeline.lock().unwrap().run(1024,response_tx.clone());
+	    data.pipeline.lock().unwrap().run(prompt,1024,response_tx.clone());
 	});});
     let  streamer = ChatResponder::Streamer(Sse::new(Streamer {
             rx,

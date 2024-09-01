@@ -183,16 +183,9 @@ impl TextGenerationApiServer {
         }
     }
 
-    pub fn run(&mut self, sample_len: usize,sender:Sender<ChatResponse>) -> () {
-        use std::io::Write;
-
-        println!("[欢迎使用Codegeex4,请输入prompt]");
-        let stdin = std::io::stdin();
-        let reader = BufReader::new(stdin);
+    pub fn run(&mut self,prompt:String, sample_len: usize,sender:Sender<ChatResponse>) -> () {
         // 从标准输入读取prompt
-        for line in reader.lines() {
-            let line = line.expect("Failed to read line");
-            let tokens = self.tokenizer.encode(line, true).expect("tokens error");
+            let tokens = self.tokenizer.encode(prompt, true).expect("tokens error");
             if tokens.is_empty() {
                 panic!("Empty prompts are not supported in the chatglm model.")
             }
@@ -209,7 +202,6 @@ impl TextGenerationApiServer {
             let mut tokens = tokens.get_ids().to_vec();
             let mut generated_tokens = 0usize;
 
-            std::io::stdout().flush().expect("output flush error");
             let start_gen = std::time::Instant::now();
 
             //            println!("\n 开始生成");
@@ -256,7 +248,6 @@ impl TextGenerationApiServer {
                     );
                 }
                 result.push(token);
-                std::io::stdout().flush().unwrap();
             }
             let dt = start_gen.elapsed();
             println!(
@@ -270,7 +261,6 @@ impl TextGenerationApiServer {
             }
 	    sender.send(ChatResponse::Done);
             self.model.reset_kv_cache(); // 清理模型kv
-        }
     }
 }
 
